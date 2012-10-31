@@ -11535,7 +11535,7 @@ $as_echo "$ac_cv_path_EGREP" >&6; }
 
 
 
-CFLAGS_ADD="$CFLAGS_ADD -Wall -Werror -Wno-unused"
+CFLAGS_ADD="$CFLAGS_ADD -Wall -Wno-unused"
 
 case $host in
 *netbsd*)
@@ -12286,7 +12286,7 @@ $as_echo "$as_me: WARNING: Using a generic fallback." >&2;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if printf accepts %z" >&5
 $as_echo_n "checking if printf accepts %z... " >&6; }
 saved_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -Wall -Werror"
+CFLAGS="$CFLAGS -Wall"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -13390,7 +13390,7 @@ _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
   ac_cv_search_pam_start="none required"
 else
-  LIBS="-lpam $LIBS"
+  LIBS="-lpam $LIBS -lrt"
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -13460,7 +13460,7 @@ _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
   ac_cv_search_pam_start="none required"
 else
-  LIBS="-lpam $LIBS"
+  LIBS="-lpam $LIBS -lrt"
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -13489,7 +13489,7 @@ rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS="$ac_func_search_save_LIBS"
  test "$ac_cv_search_pam_start" = "no" && for i in "$libpam_dir/lib"; do
-  LIBS="-L$i -lpam $ac_func_search_save_LIBS"
+  LIBS="-L$i -lpam $ac_func_search_save_LIBS -lrt"
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -13509,7 +13509,7 @@ return pam_start ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_search_pam_start="-L$i -lpam"
+  ac_cv_search_pam_start="-L$i -lpam -lrt"
   break
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -13533,7 +13533,7 @@ fi
 
 $as_echo "#define HAVE_LIBPAM /**/" >>confdefs.h
 
-	LIBS="$LIBS -L$libpam_dir/lib -R$libpam_dir/lib -lpam"
+	LIBS="$LIBS -L$libpam_dir/lib -R$libpam_dir/lib -lpam -lrt"
 	for ac_func in pam_start
 do :
   ac_fn_c_check_func "$LINENO" "pam_start" "ac_cv_func_pam_start"
@@ -13739,7 +13739,7 @@ $as_echo "#define HAVE_LIBLDAP /**/" >>confdefs.h
 	LIBS="$LIBS -L$libldap_dir/lib -R$libldap_dir/lib -lldap"
 
 	saved_CFLAGS=$CFLAGS
-	CFLAGS="$CFLAGS -Wall -Werror"
+	CFLAGS="$CFLAGS -Wall"
 	saved_CPPFLAGS=$CPPFLAGS
         CPPFLAGS="$CPPFLAGS $CPPFLAGS_ADD"
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -13852,7 +13852,7 @@ $as_echo "#define HAVE_GSSAPI /**/" >>confdefs.h
 
 	# Check if iconv 2nd argument needs const
 	saved_CFLAGS=$CFLAGS
-	CFLAGS="$CFLAGS -Wall -Werror"
+	CFLAGS="$CFLAGS -Wall"
 	saved_CPPFLAGS=$CPPFLAGS
         CPPFLAGS="$CPPFLAGS $CPPFLAGS_ADD"
 	ac_fn_c_check_header_mongrel "$LINENO" "iconv.h" "ac_cv_header_iconv_h" "$ac_includes_default"
@@ -14239,9 +14239,9 @@ fi
 	CFLAGS=$saved_CFLAGS
 	unset saved_CFLAGS
 
-if test "$buggygetaddrinfo" = "yes"; then
-	as_fn_error $? "Broken getaddrinfo() is no longer supported. Aborting." "$LINENO" 5
-fi
+#if test "$buggygetaddrinfo" = "yes"; then
+#	as_fn_error $? "Broken getaddrinfo() is no longer supported. Aborting." "$LINENO" 5
+#fi
 
 # Check if kernel support is available for NAT-T, defaults to no.
 kernel_natt="no"
