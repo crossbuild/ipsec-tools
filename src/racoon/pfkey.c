@@ -59,8 +59,9 @@
 #include <sys/param.h>
 #include <sys/socket.h>
 #include <sys/queue.h>
+#ifndef __ILP32__
 #include <sys/sysctl.h>
-
+#endif
 #include <net/route.h>
 #include <net/pfkeyv2.h>
 
