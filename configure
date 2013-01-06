@@ -13025,7 +13025,115 @@ esac
 fi
 
 
-RACOON_CHECK_VA_COPY
+
+	saved_CFLAGS=$CFLAGS
+	CFLAGS="-Wall -O2"
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for an implementation of va_copy()" >&5
+$as_echo_n "checking for an implementation of va_copy()... " >&6; }
+if ${ac_cv_va_copy+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+		if test "$cross_compiling" = yes; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cross compiling... Unable to test va_copy" >&5
+$as_echo "$as_me: WARNING: Cross compiling... Unable to test va_copy" >&2;}
+		ac_cv_va_copy=no
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <stdarg.h>
+		void func (int i, ...) {
+			va_list args1, args2;
+			va_start (args1, i);
+			va_copy (args2, args1);
+			if (va_arg (args1, int) != 1 || va_arg (args2, int) != 1)
+				exit (1);
+	 		va_end (args1);
+			va_end (args2);
+		}
+		int main() {
+			func (0, 1);
+			return 0;
+		}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  ac_cv_va_copy=yes
+else
+  ac_cv_va_copy=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_va_copy" >&5
+$as_echo "$ac_cv_va_copy" >&6; }
+	if test x$ac_cv_va_copy != xyes; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for an implementation of __va_copy()" >&5
+$as_echo_n "checking for an implementation of __va_copy()... " >&6; }
+if ${ac_cv___va_copy+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+			if test "$cross_compiling" = yes; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Cross compiling... Unable to test __va_copy" >&5
+$as_echo "$as_me: WARNING: Cross compiling... Unable to test __va_copy" >&2;}
+			ac_cv___va_copy=no
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#include <stdarg.h>
+			void func (int i, ...) {
+				va_list args1, args2;
+				va_start (args1, i);
+				__va_copy (args2, args1);
+				if (va_arg (args1, int) != 1 || va_arg (args2, int) != 1)
+					exit (1);
+				va_end (args1);
+				va_end (args2);
+			}
+			int main() {
+				func (0, 1);
+				return 0;
+			}
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  ac_cv___va_copy=yes
+else
+  ac_cv___va_copy=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv___va_copy" >&5
+$as_echo "$ac_cv___va_copy" >&6; }
+	fi
+
+	if test "x$ac_cv_va_copy" = "xyes"; then
+		va_copy_func=va_copy
+	elif test "x$ac_cv___va_copy" = "xyes"; then
+		va_copy_func=__va_copy
+	fi
+
+	if test -n "$va_copy_func"; then
+
+cat >>confdefs.h <<_ACEOF
+#define VA_COPY $va_copy_func
+_ACEOF
+
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Hmm, neither va_copy() nor __va_copy() found." >&5
+$as_echo "$as_me: WARNING: Hmm, neither va_copy() nor __va_copy() found." >&2;}
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Using a generic fallback." >&5
+$as_echo "$as_me: WARNING: Using a generic fallback." >&2;}
+	fi
+	CFLAGS=$saved_CFLAGS
+	unset saved_CFLAGS
+
 
 # Check if printf accepts "%z" type modifier for size_t argument
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if printf accepts %z" >&5
@@ -13494,10 +13602,142 @@ fi
 
 
 # For dynamic libradius
-RACOON_PATH_LIBS(MD5_Init, crypto)
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for crypto containing MD5_Init" >&5
+$as_echo_n "checking for crypto containing MD5_Init... " >&6; }
+if ${ac_cv_search_MD5_Init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_MD5_Init="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char MD5_Init ();
+int
+main ()
+{
+return MD5_Init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_MD5_Init="none required"
+else
+  LIBS="-lcrypto $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char MD5_Init ();
+int
+main ()
+{
+return MD5_Init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_MD5_Init="-lcrypto"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_MD5_Init" >&5
+$as_echo "$ac_cv_search_MD5_Init" >&6; }
+if test "$ac_cv_search_MD5_Init" != "no"; then
+  test "$ac_cv_search_MD5_Init" = "none required" || LIBS="$ac_cv_search_MD5_Init $LIBS"
+
+else :
+
+fi
 
 # Check if we need -lutil for login(3)
-RACOON_PATH_LIBS(login, util)
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for util containing login" >&5
+$as_echo_n "checking for util containing login... " >&6; }
+if ${ac_cv_search_login+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_login="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char login ();
+int
+main ()
+{
+return login ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_login="none required"
+else
+  LIBS="-lutil $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char login ();
+int
+main ()
+{
+return login ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_login="-lutil"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_login" >&5
+$as_echo "$ac_cv_search_login" >&6; }
+if test "$ac_cv_search_login" != "no"; then
+  test "$ac_cv_search_login" = "none required" || LIBS="$ac_cv_search_login $LIBS"
+
+else :
+
+fi
 
 # Specify libiconv prefix
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if --with-libiconv option is specified" >&5
@@ -13517,11 +13757,170 @@ if test "$libiconv_dir" != "no"; then
 		  libiconv_dir="";
 	fi;
 	if test "x$libiconv_dir" = "x"; then
-		RACOON_PATH_LIBS(iconv_open, iconv)
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv containing iconv_open" >&5
+$as_echo_n "checking for iconv containing iconv_open... " >&6; }
+if ${ac_cv_search_iconv_open+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_iconv_open="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char iconv_open ();
+int
+main ()
+{
+return iconv_open ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_iconv_open="none required"
+else
+  LIBS="-liconv $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char iconv_open ();
+int
+main ()
+{
+return iconv_open ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_iconv_open="-liconv"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_iconv_open" >&5
+$as_echo "$ac_cv_search_iconv_open" >&6; }
+if test "$ac_cv_search_iconv_open" != "no"; then
+  test "$ac_cv_search_iconv_open" = "none required" || LIBS="$ac_cv_search_iconv_open $LIBS"
+
+else :
+
+fi
 	else
 		if test -d "$libiconv_dir/lib" -a \
 		    -d "$libiconv_dir/include" ; then
-			RACOON_PATH_LIBS(iconv_open, iconv, "$libiconv_dir/lib")
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for iconv containing iconv_open" >&5
+$as_echo_n "checking for iconv containing iconv_open... " >&6; }
+if ${ac_cv_search_iconv_open+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_iconv_open="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char iconv_open ();
+int
+main ()
+{
+return iconv_open ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_iconv_open="none required"
+else
+  LIBS="-liconv $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char iconv_open ();
+int
+main ()
+{
+return iconv_open ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_iconv_open="-liconv"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+ test "$ac_cv_search_iconv_open" = "no" && for i in "$libiconv_dir/lib"; do
+  LIBS="-L$i -liconv $ac_func_search_save_LIBS"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char iconv_open ();
+int
+main ()
+{
+return iconv_open ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_iconv_open="-L$i -liconv"
+  break
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+  done
+LIBS="$ac_func_search_save_LIBS"
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_iconv_open" >&5
+$as_echo "$ac_cv_search_iconv_open" >&6; }
+if test "$ac_cv_search_iconv_open" != "no"; then
+  test "$ac_cv_search_iconv_open" = "none required" || LIBS="$ac_cv_search_iconv_open $LIBS"
+
+else :
+
+fi
 			CPPFLAGS_ADD="$CPPFLAGS_ADD -I$libiconv_dir/include"
 		else
 			as_fn_error $? "ICONV libs or includes not found. Aborting." "$LINENO" 5
@@ -13612,11 +14011,170 @@ if test "$libradius_dir" != "no"; then
 		  libradius_dir="";
 	fi;
 	if test "x$libradius_dir" = "x"; then
-		RACOON_PATH_LIBS(rad_create_request, radius)
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for radius containing rad_create_request" >&5
+$as_echo_n "checking for radius containing rad_create_request... " >&6; }
+if ${ac_cv_search_rad_create_request+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_rad_create_request="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char rad_create_request ();
+int
+main ()
+{
+return rad_create_request ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_rad_create_request="none required"
+else
+  LIBS="-lradius $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char rad_create_request ();
+int
+main ()
+{
+return rad_create_request ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_rad_create_request="-lradius"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_rad_create_request" >&5
+$as_echo "$ac_cv_search_rad_create_request" >&6; }
+if test "$ac_cv_search_rad_create_request" != "no"; then
+  test "$ac_cv_search_rad_create_request" = "none required" || LIBS="$ac_cv_search_rad_create_request $LIBS"
+
+else :
+
+fi
 	else
 		if test -d "$libradius_dir/lib" -a \
 		    -d "$libradius_dir/include" ; then
-			RACOON_PATH_LIBS(rad_create_request, radius, "$libradius_dir/lib")
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for radius containing rad_create_request" >&5
+$as_echo_n "checking for radius containing rad_create_request... " >&6; }
+if ${ac_cv_search_rad_create_request+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_rad_create_request="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char rad_create_request ();
+int
+main ()
+{
+return rad_create_request ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_rad_create_request="none required"
+else
+  LIBS="-lradius $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char rad_create_request ();
+int
+main ()
+{
+return rad_create_request ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_rad_create_request="-lradius"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+ test "$ac_cv_search_rad_create_request" = "no" && for i in "$libradius_dir/lib"; do
+  LIBS="-L$i -lradius $ac_func_search_save_LIBS"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char rad_create_request ();
+int
+main ()
+{
+return rad_create_request ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_rad_create_request="-L$i -lradius"
+  break
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+  done
+LIBS="$ac_func_search_save_LIBS"
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_rad_create_request" >&5
+$as_echo "$ac_cv_search_rad_create_request" >&6; }
+if test "$ac_cv_search_rad_create_request" != "no"; then
+  test "$ac_cv_search_rad_create_request" = "none required" || LIBS="$ac_cv_search_rad_create_request $LIBS"
+
+else :
+
+fi
 			CPPFLAGS_ADD="$CPPFLAGS_ADD -I$libradius_dir/include"
 		else
 			as_fn_error $? "RADIUS libs or includes not found. Aborting." "$LINENO" 5
@@ -13656,11 +14214,170 @@ if test "$libpam_dir" != "no"; then
 		  libpam_dir="";
 	fi;
 	if test "x$libpam_dir" = "x"; then
-		RACOON_PATH_LIBS(pam_start, pam)
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pam containing pam_start" >&5
+$as_echo_n "checking for pam containing pam_start... " >&6; }
+if ${ac_cv_search_pam_start+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_pam_start="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pam_start ();
+int
+main ()
+{
+return pam_start ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_pam_start="none required"
+else
+  LIBS="-lpam $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pam_start ();
+int
+main ()
+{
+return pam_start ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_pam_start="-lpam"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_pam_start" >&5
+$as_echo "$ac_cv_search_pam_start" >&6; }
+if test "$ac_cv_search_pam_start" != "no"; then
+  test "$ac_cv_search_pam_start" = "none required" || LIBS="$ac_cv_search_pam_start $LIBS"
+
+else :
+
+fi
 	else
 		if test -d "$libpam_dir/lib" -a \
 		    -d "$libpam_dir/include" ; then
-			RACOON_PATH_LIBS(pam_start, pam, "$libpam_dir/lib")
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for pam containing pam_start" >&5
+$as_echo_n "checking for pam containing pam_start... " >&6; }
+if ${ac_cv_search_pam_start+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_pam_start="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pam_start ();
+int
+main ()
+{
+return pam_start ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_pam_start="none required"
+else
+  LIBS="-lpam $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pam_start ();
+int
+main ()
+{
+return pam_start ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_pam_start="-lpam"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+ test "$ac_cv_search_pam_start" = "no" && for i in "$libpam_dir/lib"; do
+  LIBS="-L$i -lpam $ac_func_search_save_LIBS"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char pam_start ();
+int
+main ()
+{
+return pam_start ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_pam_start="-L$i -lpam"
+  break
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+  done
+LIBS="$ac_func_search_save_LIBS"
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_pam_start" >&5
+$as_echo "$ac_cv_search_pam_start" >&6; }
+if test "$ac_cv_search_pam_start" != "no"; then
+  test "$ac_cv_search_pam_start" = "none required" || LIBS="$ac_cv_search_pam_start $LIBS"
+
+else :
+
+fi
 			CPPFLAGS_ADD="$CPPFLAGS_ADD -I$libpam_dir/include"
 		else
 			as_fn_error $? "PAM libs or includes not found. Aborting." "$LINENO" 5
@@ -13700,11 +14417,170 @@ if test "$libldap_dir" != "no"; then
 		  libldap_dir="";
 	fi;
 	if test "x$libldap_dir" = "x"; then
-		RACOON_PATH_LIBS(ldap_init, ldap)
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap containing ldap_init" >&5
+$as_echo_n "checking for ldap containing ldap_init... " >&6; }
+if ${ac_cv_search_ldap_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_ldap_init="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_init ();
+int
+main ()
+{
+return ldap_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_ldap_init="none required"
+else
+  LIBS="-lldap $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_init ();
+int
+main ()
+{
+return ldap_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_ldap_init="-lldap"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_ldap_init" >&5
+$as_echo "$ac_cv_search_ldap_init" >&6; }
+if test "$ac_cv_search_ldap_init" != "no"; then
+  test "$ac_cv_search_ldap_init" = "none required" || LIBS="$ac_cv_search_ldap_init $LIBS"
+
+else :
+
+fi
 	else
 		if test -d "$libldap_dir/lib" -a \
 		    -d "$libldap_dir/include" ; then
-			RACOON_PATH_LIBS(ldap_init, ldap, "$libldap_dir/lib")
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for ldap containing ldap_init" >&5
+$as_echo_n "checking for ldap containing ldap_init... " >&6; }
+if ${ac_cv_search_ldap_init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_ldap_init="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_init ();
+int
+main ()
+{
+return ldap_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_ldap_init="none required"
+else
+  LIBS="-lldap $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_init ();
+int
+main ()
+{
+return ldap_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_ldap_init="-lldap"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+ test "$ac_cv_search_ldap_init" = "no" && for i in "$libldap_dir/lib"; do
+  LIBS="-L$i -lldap $ac_func_search_save_LIBS"
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char ldap_init ();
+int
+main ()
+{
+return ldap_init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_ldap_init="-L$i -lldap"
+  break
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+  done
+LIBS="$ac_func_search_save_LIBS"
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_ldap_init" >&5
+$as_echo "$ac_cv_search_ldap_init" >&6; }
+if test "$ac_cv_search_ldap_init" != "no"; then
+  test "$ac_cv_search_ldap_init" = "none required" || LIBS="$ac_cv_search_ldap_init $LIBS"
+
+else :
+
+fi
 			CPPFLAGS_ADD="$CPPFLAGS_ADD -I$libldap_dir/include"
 		else
 			as_fn_error $? "LDAP libs or includes not found. Aborting." "$LINENO" 5
@@ -14099,7 +14975,123 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 
-RACOON_CHECK_BUGGY_GETADDRINFO
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking getaddrinfo bug" >&5
+$as_echo_n "checking getaddrinfo bug... " >&6; }
+	saved_CFLAGS=$CFLAGS
+	CFLAGS="-Wall -O2"
+	if test "$cross_compiling" = yes; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: Cross compiling ... Assuming getaddrinfo is not buggy." >&5
+$as_echo "Cross compiling ... Assuming getaddrinfo is not buggy." >&6; }
+	buggygetaddrinfo=no
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+	#include <sys/types.h>
+	#include <sys/socket.h>
+	#include <netdb.h>
+	#include <stdlib.h>
+	#include <string.h>
+	#include <netinet/in.h>
+
+	int main()
+	{
+	  int passive, gaierr, inet4 = 0, inet6 = 0;
+	  struct addrinfo hints, *ai, *aitop;
+	  char straddr[INET6_ADDRSTRLEN], strport[16];
+
+	  for (passive = 0; passive <= 1; passive++) {
+	    memset(&hints, 0, sizeof(hints));
+	    hints.ai_family = AF_UNSPEC;
+	    hints.ai_flags = passive ? AI_PASSIVE : 0;
+	    hints.ai_protocol = IPPROTO_TCP;
+	    hints.ai_socktype = SOCK_STREAM;
+	    if ((gaierr = getaddrinfo(NULL, "54321", &hints, &aitop)) != 0) {
+	      (void)gai_strerror(gaierr);
+	      goto bad;
+	    }
+	    for (ai = aitop; ai; ai = ai->ai_next) {
+	      if (ai->ai_addr == NULL ||
+	          ai->ai_addrlen == 0 ||
+	          getnameinfo(ai->ai_addr, ai->ai_addrlen,
+	                      straddr, sizeof(straddr), strport, sizeof(strport),
+	                      NI_NUMERICHOST|NI_NUMERICSERV) != 0) {
+	        goto bad;
+	      }
+	      switch (ai->ai_family) {
+	      case AF_INET:
+		if (strcmp(strport, "54321") != 0) {
+		  goto bad;
+		}
+	        if (passive) {
+	          if (strcmp(straddr, "0.0.0.0") != 0) {
+	            goto bad;
+	          }
+	        } else {
+	          if (strcmp(straddr, "127.0.0.1") != 0) {
+	            goto bad;
+	          }
+	        }
+	        inet4++;
+	        break;
+	      case AF_INET6:
+		if (strcmp(strport, "54321") != 0) {
+		  goto bad;
+		}
+	        if (passive) {
+	          if (strcmp(straddr, "::") != 0) {
+	            goto bad;
+	          }
+	        } else {
+	          if (strcmp(straddr, "::1") != 0) {
+	            goto bad;
+	          }
+	        }
+	        inet6++;
+	        break;
+	      case AF_UNSPEC:
+	        goto bad;
+	        break;
+	      default:
+	        /* another family support? */
+	        break;
+	      }
+	    }
+	  }
+
+	  if (!(inet4 == 0 || inet4 == 2))
+	    goto bad;
+	  if (!(inet6 == 0 || inet6 == 2))
+	    goto bad;
+
+	  if (aitop)
+	    freeaddrinfo(aitop);
+	  exit(0);
+
+	 bad:
+	  if (aitop)
+	    freeaddrinfo(aitop);
+	  exit(1);
+	}
+
+_ACEOF
+if ac_fn_c_try_run "$LINENO"; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: good" >&5
+$as_echo "good" >&6; }
+	buggygetaddrinfo=no
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: buggy" >&5
+$as_echo "buggy" >&6; }
+	buggygetaddrinfo=yes
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+  conftest.$ac_objext conftest.beam conftest.$ac_ext
+fi
+
+	CFLAGS=$saved_CFLAGS
+	unset saved_CFLAGS
+
 if test "$buggygetaddrinfo" = "yes"; then
 	as_fn_error $? "Broken getaddrinfo() is no longer supported. Aborting." "$LINENO" 5
 fi
@@ -14398,7 +15390,73 @@ $as_echo "#define HAVE_SECCTX /**/" >>confdefs.h
 	fi
 fi
 
-RACOON_PATH_LIBS(clock_gettime, rt)
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for rt containing clock_gettime" >&5
+$as_echo_n "checking for rt containing clock_gettime... " >&6; }
+if ${ac_cv_search_clock_gettime+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_func_search_save_LIBS="$LIBS"
+ac_cv_search_clock_gettime="no"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char clock_gettime ();
+int
+main ()
+{
+return clock_gettime ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_clock_gettime="none required"
+else
+  LIBS="-lrt $LIBS"
+	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char clock_gettime ();
+int
+main ()
+{
+return clock_gettime ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_search_clock_gettime="-lrt"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS="$ac_func_search_save_LIBS"
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_search_clock_gettime" >&5
+$as_echo "$ac_cv_search_clock_gettime" >&6; }
+if test "$ac_cv_search_clock_gettime" != "no"; then
+  test "$ac_cv_search_clock_gettime" = "none required" || LIBS="$ac_cv_search_clock_gettime $LIBS"
+
+else :
+
+fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for monotonic system clock" >&5
 $as_echo_n "checking for monotonic system clock... " >&6; }
