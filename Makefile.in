@@ -82,9 +82,9 @@ DIST_COMMON = $(srcdir)/Makefile.in $(srcdir)/Makefile.am \
 	$(top_srcdir)/configure $(am__configure_deps) \
 	$(srcdir)/config.h.in $(srcdir)/package_version.h.in \
 	$(top_srcdir)/src/racoon/samples/psk.txt.in \
-	$(top_srcdir)/src/racoon/samples/racoon.conf.in ChangeLog NEWS \
-	README compile config.guess config.sub depcomp install-sh \
-	missing ylwrap ltmain.sh
+	$(top_srcdir)/src/racoon/samples/racoon.conf.in AUTHORS \
+	COPYING ChangeLog INSTALL NEWS README compile config.guess \
+	config.sub depcomp install-sh missing ylwrap ltmain.sh
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acracoon.m4 \
 	$(top_srcdir)/configure.ac
