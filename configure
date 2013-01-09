@@ -11885,7 +11885,7 @@ $as_echo "$ac_cv_path_EGREP" >&6; }
 
 
 
-CFLAGS_ADD="$CFLAGS_ADD -Wall -Werror -Wno-unused"
+CFLAGS_ADD="$CFLAGS_ADD -Wall -Wno-unused"
 
 case $host in
 *netbsd*)
@@ -12637,7 +12637,7 @@ $as_echo "$as_me: WARNING: Using a generic fallback." >&2;}
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if printf accepts %z" >&5
 $as_echo_n "checking if printf accepts %z... " >&6; }
 saved_CFLAGS=$CFLAGS
-CFLAGS="$CFLAGS -Wall -Werror"
+CFLAGS="$CFLAGS -Wall"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -14090,7 +14090,7 @@ $as_echo "#define HAVE_LIBLDAP /**/" >>confdefs.h
 	LIBS="$LIBS -L$libldap_dir/lib -R$libldap_dir/lib -lldap"
 
 	saved_CFLAGS=$CFLAGS
-	CFLAGS="$CFLAGS -Wall -Werror"
+	CFLAGS="$CFLAGS -Wall"
 	saved_CPPFLAGS=$CPPFLAGS
         CPPFLAGS="$CPPFLAGS $CPPFLAGS_ADD"
 	cat confdefs.h - <<_ACEOF >conftest.$ac_ext
@@ -14203,7 +14203,7 @@ $as_echo "#define HAVE_GSSAPI /**/" >>confdefs.h
 
 	# Check if iconv 2nd argument needs const
 	saved_CFLAGS=$CFLAGS
-	CFLAGS="$CFLAGS -Wall -Werror"
+	CFLAGS="$CFLAGS -Wall"
 	saved_CPPFLAGS=$CPPFLAGS
         CPPFLAGS="$CPPFLAGS $CPPFLAGS_ADD"
 	ac_fn_c_check_header_mongrel "$LINENO" "iconv.h" "ac_cv_header_iconv_h" "$ac_includes_default"
