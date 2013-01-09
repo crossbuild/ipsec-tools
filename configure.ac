@@ -627,10 +627,10 @@ if test "$ipv6" = "yes"; then
 		[AC_MSG_RESULT(no)])
 fi
 
-RACOON_CHECK_BUGGY_GETADDRINFO
-if test "$buggygetaddrinfo" = "yes"; then
-	AC_MSG_ERROR([Broken getaddrinfo() is no longer supported. Aborting.])
-fi
+#RACOON_CHECK_BUGGY_GETADDRINFO
+#if test "$buggygetaddrinfo" = "yes"; then
+#	AC_MSG_ERROR([Broken getaddrinfo() is no longer supported. Aborting.])
+#fi
 
 # Check if kernel support is available for NAT-T, defaults to no. 
 kernel_natt="no"
