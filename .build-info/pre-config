@@ -1,0 +1,3 @@
+#!/bin/bash
+
+automake-1.12 -a -c
