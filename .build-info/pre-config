@@ -2,5 +2,6 @@
 
 if [ -d ../../ipsec-tools-0.8.0-svn ];then
   svn export --force ../../ipsec-tools-0.8.0-svn/ ../
+  (cd ..
+  automake-1.12)
 fi;
-automake-1.12
