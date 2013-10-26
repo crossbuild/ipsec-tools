@@ -123,8 +123,7 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(man3dir)" \
 	"$(DESTDIR)$(libipsecdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
-am__DEPENDENCIES_1 =
-libipsec_la_DEPENDENCIES = $(am__DEPENDENCIES_1)
+libipsec_la_DEPENDENCIES =
 am_libipsec_la_OBJECTS = ipsec_dump_policy.lo ipsec_get_policylen.lo \
 	ipsec_strerror.lo key_debug.lo pfkey.lo pfkey_dump.lo \
 	policy_parse.lo policy_token.lo
@@ -375,7 +374,7 @@ libipsec_la_SOURCES = \
 # version is current:revision:age.
 # See: http://www.gnu.org/manual/libtool-1.4.2/html_chapter/libtool_6.html#SEC32
 libipsec_la_LDFLAGS = -version-info 0:1:0
-libipsec_la_LIBADD = $(LEXLIB)
+libipsec_la_LIBADD = 
 noinst_HEADERS = ipsec_strerror.h
 
 #test_policy_SOURCES = test-policy.c

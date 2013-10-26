@@ -167,6 +167,7 @@ extern FILE *yyin, *yyout;
 #define EOB_ACT_LAST_MATCH 2
 
     #define YY_LESS_LINENO(n)
+    #define YY_LINENO_REWIND_TO(ptr)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -1079,7 +1080,7 @@ char *yytext;
 /* common section */
 
 #define YY_NO_INPUT 1
-#line 1083 "token.c"
+#line 1084 "token.c"
 
 #define INITIAL 0
 #define S_PL 1
@@ -1266,7 +1267,7 @@ YY_DECL
 
 
 
-#line 1270 "token.c"
+#line 1271 "token.c"
 
 	if ( !(yy_init) )
 		{
@@ -1316,7 +1317,7 @@ YY_DECL
 yy_match:
 		do
 			{
-			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)];
+			register YY_CHAR yy_c = yy_ec[YY_SC_TO_UI(*yy_cp)] ;
 			if ( yy_accept[yy_current_state] )
 				{
 				(yy_last_accepting_state) = yy_current_state;
@@ -1899,7 +1900,7 @@ YY_RULE_SETUP
 #line 314 "token.l"
 ECHO;
 	YY_BREAK
-#line 1903 "token.c"
+#line 1904 "token.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(S_PL):
 case YY_STATE_EOF(S_AUTHALG):
@@ -2629,7 +2630,7 @@ YY_BUFFER_STATE yy_scan_bytes  (yyconst char * yybytes, yy_size_t  _yybytes_len 
 	YY_BUFFER_STATE b;
 	char *buf;
 	yy_size_t n;
-	int i;
+	yy_size_t i;
     
 	/* Get memory for full buffer, including space for trailing EOB's. */
 	n = _yybytes_len + 2;
