@@ -1,3 +1,49 @@
+2013-07-12  Timo Teras <timo.teras@iki.fi>
+
+	* src/racoon/main.c: From Sven Vermeulen
+	  <sven.vermeulen@siphos.be>: Moves ploginit() up, allowing logging
+	  events from init_avc() to show up as well.
+
+2013-06-18  Timo Teras <timo.teras@iki.fi>
+
+	* src/racoon/ipsec_doi.c: From Paul Barker: Remove redundant memset
+	  after calloc that caused compile failures with gcc 4.8 due to error:
+	  argument to 'sizeof' in 'memset' call is the same expression as the
+	  destination; did you mean to dereference.
+
+2013-06-03  Timo Teras <timo.teras@iki.fi>
+
+	* src/racoon/admin.c: From Alexander Sbitnev
+	  <alexander.sbitnev@gmail.com>: fix admin port establish-sa for
+	  tunnel mode SAs.
+
+2013-05-23  Timo Teras <timo.teras@iki.fi>
+
+	* src/include-glibc/net/pfkeyv2.h: From Rainer Weikusat
+	  <rweikusat@mobileactivedefense.com>: Fix SADB_X_EALG_CASTCBC
+	  definition to use system definition (which differs at least on
+	  Linux).
+
+2013-04-12  Timo Teras <timo.teras@iki.fi>
+
+	* src/racoon/isakmp_cfg.c: From Rainer Weikusat
+	  <rweikusat@mobileactivedefense.com>: Do not send out illegal zero
+	  length MODE_CFG attributes.
+
+	* src/racoon/: grabmyaddr.c, isakmp_inf.c: Some logging
+	  improvements.
+
+2013-02-05  Timo Teras <timo.teras@iki.fi>
+
+	* src/racoon/grabmyaddr.c: Fix source port selection
+
+	* src/racoon/isakmp_xauth.c: From Ian West <ian@niw.com.au>: Fix
+	  double free of the radius info on config reload.
+
+2013-01-24  Timo Teras <timo.teras@iki.fi>
+
+	* src/racoon/isakmp_inf.c: Fix handling of deletion notification.
+
 2013-01-08  tag ipsec-tools-0_8_1
 
 2013-01-08  Timo Teras <timo.teras@iki.fi>
